@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
 import { apiUrl } from "../constants";
-import PostWp from "./PostWp";
+import PostWp from "./PostsWp";
 import PaginationWp from "./PaginationWp";
 
 function HomeWp() {
