@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { getPost } from "../redux/actions/posts";
 
 function PostsWp({ post }) {
-  console.log("questo è un post", post.id);
-  const urlImg = post._links["wp:featuredmedia"][0].href;
-
+  const urlImg = post._links["wp:featuredmedia"] ? post._links["wp:featuredmedia"][0].href : "";
   const [img, setImg] = useState("");
-
-  const dispatch = useDispatch();
-
   useEffect(() => {
     fetch(urlImg)
       .then(resp => {
@@ -23,10 +16,6 @@ function PostsWp({ post }) {
       })
       .catch(err => console.log("C'è un errore:", err));
   }, []);
-
-  useEffect(() => {
-    dispatch(getPost(post));
-  }, [post]);
 
   const description = post.excerpt.rendered.substring(0, 150) + "...";
 
