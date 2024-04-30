@@ -22,7 +22,7 @@ function HomeWp() {
         setPosts(data);
       })
       .catch(err => console.log("C'è un errore:", err));
-  }, [currentPage, postsPerPage]);
+  }, [posts, currentPage, postsPerPage]);
 
   // const totalPages = Math.ceil(posts.length / postsPerPage);
   const startIndex = (currentPage - 1) * postsPerPage;

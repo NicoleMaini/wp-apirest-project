@@ -1,6 +1,6 @@
 import { Container, Spinner } from "react-bootstrap";
 import { apiUrl } from "../constants";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -17,6 +17,8 @@ function SinglePostWp() {
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -60,10 +62,11 @@ function SinglePostWp() {
     return `${start}`;
   };
 
+  const nameUser = "Nico_le:GAly 563N CSk2 Lt3R T19W Xd26";
+  const passwordUser = btoa(nameUser);
+
   const fetchAdd = e => {
     e.prevent.default();
-    const nameUser = "Nico_le:GAly 563N CSk2 Lt3R T19W Xd26";
-    const passwordUser = btoa(nameUser);
     fetch(apiUrl + `/posts/${id}`, {
       method: "PUT",
       headers: {
@@ -91,10 +94,24 @@ function SinglePostWp() {
     getPost();
     handleClose();
   };
+
+  const deletePost = () => {
+    fetch(apiUrl + `/posts/${id}`, {
+      headers: {
+        Authorization: `Basic ${passwordUser}`,
+      },
+      method: "DELETE",
+    }).then(res => {
+      if (res.ok) {
+        console.log("ok");
+      }
+    });
+  };
+
   const handleClickDelete = e => {
-    fetchAdd(e);
-    getPost();
+    deletePost();
     handleClose();
+    navigate("/");
   };
 
   return (
@@ -115,7 +132,7 @@ function SinglePostWp() {
             </p>
           )}
           <Button variant="outline-warning" onClick={handleShow}>
-            Aggiungi articolo
+            Modifica
           </Button>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
