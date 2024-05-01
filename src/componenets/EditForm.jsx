@@ -8,27 +8,70 @@ function EditForm() {
 
   const navigate = useNavigate();
 
+  const [post, setPost] = useState(null);
+  console.log(post);
+
+  //   const [image, setImage] = useState(null);
+
+  //   const [imageId, setImageId] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  //   const [imagUrl, setImgUrl] = useState([]);
+  const [category, setCategory] = useState(1);
+
+  const [categories, setCategories] = useState("");
+  const [selected, setSelected] = useState("");
 
   const urlPost = `${apiUrl}/posts/${id}`;
+  const urlCategories = `${apiUrl}/categories`;
 
-  const getPost = () => {
-    fetch(urlPost)
+  const getDetails = (url, set) => {
+    fetch(url)
       .then(res => res.json())
       .then(data => {
-        setTitle(data.title.rendered);
-        setContent(data.content.rendered);
+        set(data);
       })
       .catch(err => console.log("C'è un errore:", err));
   };
 
   useEffect(() => {
-    id && getPost();
+    id && getDetails(urlPost, setPost);
+    getDetails(urlCategories, setCategories);
   }, []);
 
+  useEffect(() => {
+    if (post) {
+      setTitle(post.title.rendered);
+      setContent(post.content.rendered);
+      setCategory(post.categories[0]);
+    }
+  }, [post]);
+
+  useEffect(() => {
+    if (post) {
+      categories && categories.filter(cat => cat.id === category && setSelected(cat.name));
+    }
+  }, [category]);
+
   const fetchAdd = (url, method) => {
+    // const imageData = new FormData();
+    // imageData.append("file", image);
+    // fetch(apiUrl + "/media", {
+    //   method: "POST",
+    //   headers: {
+    //     Authorization: `Basic ${passwordUser}`,
+    //   },
+    //   body: imageData,
+    // })
+    //   .then(resp => {
+    //     return resp.json();
+    //   })
+    //   .then(data => {
+    //     console.log("Immagine caricata del post", data);
+    //     setImageId(data.id);
+    //   })
+    //   .catch(err => console.log("C'è un errore:", err));
+
+    // if (imageId) {
     fetch(apiUrl + url, {
       method: method,
       headers: {
@@ -38,6 +81,8 @@ function EditForm() {
       body: JSON.stringify({
         title: title,
         content: content,
+        categories: category,
+        //   featured_media: imageId,
         status: "publish",
       }),
     })
@@ -48,6 +93,7 @@ function EditForm() {
         console.log("ok");
       })
       .catch(err => console.log("C'è un errore:", err));
+    // }
   };
 
   const handleClickEdit = () => {
@@ -83,17 +129,35 @@ function EditForm() {
     <>
       <Form>
         {/* <Form.Group className="position-relative mb-3">
-              <Form.Label>File</Form.Label>
-              <Form.Control type="file" name="file" onChange={e => setImgUrl(e.target.files[0])} />
-            </Form.Group> */}
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Label>File</Form.Label>
+          <Form.Control type="file" onChange={e => setImage(e.target.files[0])} />
+        </Form.Group> */}
+        <Form.Group className="mb-3" controlId="text">
           <Form.Label>Titolo</Form.Label>
           <Form.Control type="text" autoFocus value={title} onChange={e => setTitle(e.target.value)} />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="...document.querySelector('.');">
+        <Form.Group className="mb-3" controlId="textarea">
           <Form.Label>Contenuto</Form.Label>
-          <Form.Control as="textarea" rows={3} value={content} onChange={e => setContent(e.target.value)} />
+          <Form.Control as="textarea" rows={6} value={content} onChange={e => setContent(e.target.value)} />
         </Form.Group>
+        <Form.Group className="mb-3" controlId="btn">
+          <p>Aggiungi categorie: {categories && selected}</p>
+          {categories &&
+            categories.map((cat, i) => (
+              <Button
+                key={i}
+                variant="light"
+                className="btn categories-sidebar-style m-1"
+                onClick={() => {
+                  setCategory(cat.id);
+                  setSelected(cat.name);
+                }}
+              >
+                {cat.name}
+              </Button>
+            ))}
+        </Form.Group>
+
         {id ? (
           <>
             <Button variant="danger" onClick={handleClickDelete}>

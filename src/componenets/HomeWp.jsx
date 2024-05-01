@@ -10,13 +10,14 @@ function HomeWp() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetch(apiUrl + `/posts?page=${currentPage}`)
+    fetch(apiUrl + `/posts?_embed&page=${currentPage}`)
       .then(resp => {
         setLastPage(parseInt(resp.headers.get("X-WP-TotalPages")));
         return resp.json();
       })
       .then(data => {
         setPosts(data);
+        console.log("ma is not fun", data);
       })
       .catch(err => console.log("C'è un errore:", err));
   }, [posts]);
