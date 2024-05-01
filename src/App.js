@@ -4,8 +4,7 @@ import NavWp from "./componenets/NavWp";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomeWp from "./componenets/HomeWp";
 import SinglePostWp from "./componenets/SinglePostWp";
-
-// GAly 563N CSk2 Lt3R T19W Xd26 password API
+import EditForm from "./componenets/EditForm";
 
 function App() {
   return (
@@ -15,6 +14,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomeWp />} />
           <Route path="/post/:id" element={<SinglePostWp />} />
+          <Route path="/add" element={<EditForm />} />
+          <Route path="/edit/:id" element={<EditForm />} />
         </Routes>
       </div>
     </BrowserRouter>

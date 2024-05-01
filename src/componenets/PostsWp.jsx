@@ -5,23 +5,27 @@ import { Link } from "react-router-dom";
 
 function PostsWp({ post }) {
   const urlImg = post._links["wp:featuredmedia"] ? post._links["wp:featuredmedia"][0].href : "";
+
   const [img, setImg] = useState("");
+
   useEffect(() => {
     fetch(urlImg)
       .then(resp => {
         return resp.json();
       })
       .then(data => {
+        console.log(data);
         setImg(data.link);
       })
       .catch(err => console.log("C'è un errore:", err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const description = post.excerpt.rendered.substring(0, 150) + "...";
 
   return (
     post && (
-      <Col sm={2} md={3} lg={4} className="mt-5">
+      <Col md={6} lg={4} xl={3} className="mt-5">
         <Card className="h-100 rounded-0">
           {img && (
             <Card.Img
