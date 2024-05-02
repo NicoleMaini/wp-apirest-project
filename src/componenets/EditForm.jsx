@@ -24,8 +24,7 @@ function EditForm() {
 
   const [showDelete, setShowDelete] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
-
-  // const handleShow = () => setShow(true);
+  const [showEdit, setShowEdit] = useState(false);
 
   const urlPost = `${apiUrl}/posts/${id}?_embed`;
   const urlCategories = `${apiUrl}/categories`;
@@ -76,7 +75,17 @@ function EditForm() {
       .then(data => {
         console.log("post mod", data);
         setStatus("Operazione completata con successo");
-        id && navigate(`/post/${id}`);
+        if (id) {
+          setTimeout(() => {
+            navigate(`/post/${id}`);
+          }, 1500);
+        } else {
+          setTitle("");
+          setContent("");
+          setCategory(1);
+          setImageId(null);
+          setSelected("");
+        }
       })
       .catch(err => console.log("C'è un errore:", err));
   }
@@ -109,10 +118,6 @@ function EditForm() {
       .catch(err => console.log("C'è un errore:", err));
   };
 
-  const handleClickEdit = () => {
-    fetchAdd(`/posts/${id}`, "PUT");
-  };
-
   const deletePost = () => {
     fetch(apiUrl + `/posts/${id}`, {
       headers: {
@@ -125,22 +130,6 @@ function EditForm() {
       })
       .then(resp => setStatus("Post eliminato"))
       .catch(err => console.log("C'è un errore:", err));
-  };
-
-  // const handleClickDelete = e => {
-  //   setShow(true);
-  //   <ModalConfirm text="Sei sicuro di voler eliminare questo post?" func={deletePost} btn="Elimina" />;
-  //   // if (window.confirm("Sicuro di voler eliminare questo post?")) {
-  //   //   deletePost();
-  //   //   window.alert("Post eliminato");
-  //   //   navigate("/");
-  //   // }
-  // };
-
-  const handleClickAdd = e => {
-    fetchAdd(`/posts`, "POST");
-    setTitle("");
-    setContent("");
   };
 
   return (
@@ -181,7 +170,7 @@ function EditForm() {
             <Button variant="danger" onClick={() => setShowDelete(true)}>
               Cancella post
             </Button>{" "}
-            <Button variant="success" onClick={() => setShowAdd(true)}>
+            <Button variant="success" onClick={() => setShowEdit(true)}>
               Modifica
             </Button>
           </>
@@ -201,6 +190,7 @@ function EditForm() {
         func={deletePost}
         status={status}
         btn="Elimina"
+        id={id}
       />
       <ModalConfirm
         show={showAdd}
@@ -209,13 +199,12 @@ function EditForm() {
         func={fetchAdd}
         status={status}
         btn="Aggiungi"
-        id={id}
         url="/posts"
         method="POST"
       />
       <ModalConfirm
-        show={showAdd}
-        hide={() => setShowAdd(false)}
+        show={showEdit}
+        hide={() => setShowEdit(false)}
         text="Sei sicuro di voler modificare questo post?"
         func={fetchAdd}
         status={status}
