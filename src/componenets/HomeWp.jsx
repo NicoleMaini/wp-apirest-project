@@ -17,10 +17,9 @@ function HomeWp() {
       })
       .then(data => {
         setPosts(data);
-        console.log("ma is not fun", data);
       })
       .catch(err => console.log("C'è un errore:", err));
-  }, [posts]);
+  }, [currentPage]);
 
   const changePage = page => {
     setCurrentPage(page);

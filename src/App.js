@@ -15,7 +15,7 @@ function App() {
       <div>
         <NavWp />
         <Row className="w-100">
-          <Col md={9}>
+          <Col md={9} className="px-5">
             <Routes>
               <Route path="/" element={<HomeWp />} />
               <Route path="/post/:id" element={<SinglePostWp />} />

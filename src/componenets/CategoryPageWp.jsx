@@ -11,10 +11,10 @@ function CategoryPageWp() {
   const categoryName = category.id.replace(/[^a-z\s]?/gi, "");
 
   const [posts, setPosts] = useState([]);
-  console.log(posts);
+  console.log("CATEGORY PAGE", posts);
 
   const getPosts = () => {
-    fetch(apiUrl + `/posts?categories=${id}`)
+    fetch(apiUrl + `/posts?categories=${id}&_embed`)
       .then(res => res.json())
       .then(data => {
         setPosts(data);

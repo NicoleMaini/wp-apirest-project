@@ -7,12 +7,9 @@ function SinglePostWp() {
   const { id } = useParams();
 
   const [post, setPost] = useState(null);
-  const [author, setAuthor] = useState(null);
-  const [category, setCategory] = useState(null);
+  console.log("POST SINGLE PAGE", post);
 
-  const urlPost = `${apiUrl}/posts/${id}`;
-  const urlAuthor = post && post._links.author[0].href;
-  const urlCategory = post && post._links["wp:term"][0].href;
+  const urlPost = `${apiUrl}/posts/${id}?_embed`;
 
   const getDetails = (url, set) => {
     fetch(url)
@@ -25,18 +22,10 @@ function SinglePostWp() {
       .catch(err => console.log("C'è un errore:", err));
   };
 
-  const restart = post && post.modified;
-
   useEffect(() => {
     getDetails(urlPost, setPost);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, restart]);
-
-  useEffect(() => {
-    getDetails(urlAuthor, setAuthor);
-    getDetails(urlCategory, setCategory);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [restart]);
+  }, []);
 
   const formatDates = startDate => {
     const start = new Date(startDate).toLocaleDateString();
@@ -44,28 +33,27 @@ function SinglePostWp() {
   };
 
   return (
-    <Container className="mx-auto my-5">
+    <>
+      {post && post._embedded["wp:featuredmedia"] && (
+        <img src={post._embedded["wp:featuredmedia"][0].source_url} alt="" />
+      )}
       {post ? (
-        <>
+        <Container className="mx-auto my-5">
           <h1 className="text-center" dangerouslySetInnerHTML={{ __html: post.title.rendered }}></h1>
-          {author && (
-            <p className="my-3 small">
-              Plubbicato il <span className="fw-semibold">{formatDates(post.date)}</span> da{" "}
-              <span className="fw-semibold">{author.name}</span>
-            </p>
-          )}
+          <p className="my-3 small">
+            Plubbicato il <span className="fw-semibold">{formatDates(post.date)}</span> da{" "}
+            <span className="fw-semibold">{post._embedded["author"][0].name}</span>
+          </p>
           <p dangerouslySetInnerHTML={{ __html: post.content.rendered }}></p>
-          {category && (
-            <p className="my-3 small">
-              Categorie: <span className="fw-semibold">{category[0].name}</span>
-            </p>
-          )}
+          <p className="my-3 small">
+            Categorie: <span className="fw-semibold">{post._embedded["wp:term"][0][0].name}</span>
+          </p>
           <Link to={`/edit/${id}`}>Modifica</Link>
-        </>
+        </Container>
       ) : (
         <Spinner className="d-flex justify-content-center" />
       )}
-    </Container>
+    </>
   );
 }
 export default SinglePostWp;
