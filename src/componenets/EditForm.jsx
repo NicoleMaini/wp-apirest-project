@@ -87,7 +87,7 @@ function EditForm() {
           setSelected("");
         }
       })
-      .catch(err => console.log("C'è un errore:", err));
+      .catch(err => setStatus("Ops qualcosa è andato storto nel salvatggio del post"));
   }
 
   const fetchAdd = (url, method) => {
@@ -105,17 +105,14 @@ function EditForm() {
         return resp.json();
       })
       .then(data => {
-        console.log("Immagine caricata del post", data);
         if (data.id !== imageId) {
           setImageId(data.id);
           addPost(url, method, data.id);
-          console.log("sono nel if");
         } else {
           addPost(url, method, imageId);
-          console.log("sono nel else");
         }
       })
-      .catch(err => console.log("C'è un errore:", err));
+      .catch(err => setStatus("Ops qualcosa è andato storto nell'inserimento dell'immagine"));
   };
 
   const deletePost = () => {
@@ -129,7 +126,7 @@ function EditForm() {
         return resp.json();
       })
       .then(resp => setStatus("Post eliminato"))
-      .catch(err => console.log("C'è un errore:", err));
+      .catch(err => setStatus("Ops, c'è stato un errore nell'eliminazione del post"));
   };
 
   return (
