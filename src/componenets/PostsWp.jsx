@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col } from "react-bootstrap";
+import { Col, Row, Stack } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 
@@ -7,22 +7,39 @@ function PostsWp({ post }) {
   const img = post._embedded["wp:featuredmedia"] && post._embedded["wp:featuredmedia"][0].source_url;
 
   const text = post.excerpt.rendered;
-  const description = text.length > 153 ? text.substring(0, 150) + "..." : text;
+  const description = text.length > 153 ? text.substring(0, 90) + "..." : text;
 
   return (
     post && (
-      <Col md={6} lg={4} className="mt-5">
-        <Card className="h-100 rounded-0">
-          <Card.Img variant="top" src={img} className="w-100 object-fit-cover rounded-0" style={{ height: "15rem" }} />
-          <Card.Body className="d-flex flex-column">
-            <Card.Title dangerouslySetInnerHTML={{ __html: post.title.rendered }} className="text-short"></Card.Title>
-            <Card.Text dangerouslySetInnerHTML={{ __html: description }} />
-            <Link to={`/post/${post.id}`} className="mt-auto">
-              Leggi di più
+      <>
+        <Col md={6} lg={4} className="p-3 text-center h-100">
+          <div className="bg-acquamarine h-100">
+            <Link to={`/post/${post.id}`}>
+              <h5
+                dangerouslySetInnerHTML={{ __html: post.title.rendered }}
+                className="text-short read-more-card p-2"
+              ></h5>
             </Link>
-          </Card.Body>
-        </Card>
-      </Col>
+            <div className="img-card-container p-4">
+              <Link to={`/post/${post.id}`}>
+                {" "}
+                <img src={img} alt="" className="img-card rounded-2" />
+              </Link>
+            </div>
+            <div className="d-flex flex-column h-100 text-card-border ">
+              <Link to={`/post/${post.id}`} className="text-card pb-3">
+                <p
+                  dangerouslySetInnerHTML={{ __html: description }}
+                  className="mx-4 bg-white mb-2 p-0 p-1 rounded-2 h-100"
+                ></p>
+              </Link>
+              <Link to={`/post/${post.id}`} className="mx-auto w-100 read-more-card py-2">
+                Leggi di più &raquo;
+              </Link>
+            </div>
+          </div>
+        </Col>
+      </>
     )
   );
 }

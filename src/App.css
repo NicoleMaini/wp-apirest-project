@@ -1,3 +1,12 @@
+body {
+  background-color: #1d1017;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
 .text-short {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -14,4 +23,70 @@
 .cat-hover {
   background-color: #5c636a;
   color: #ffffff;
+}
+
+.height-card {
+  max-width: 50rem;
+  margin-inline: auto;
+}
+
+.img-card-container {
+  height: 30vh;
+  object-fit: cover;
+  /* border-radius: 15px;
+  border: 1px solid black;
+  border-inline-end: none; */
+}
+.img-card {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.text-card-border {
+  /* border-radius: 15px; */
+  /* border: 1px solid black;
+  border-inline-start: none; */
+}
+
+.hvh {
+  height: 80vh;
+  width: 100%;
+  object-fit: cover;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  scale: 1.02;
+}
+
+.read-more-card:hover {
+  scale: 1;
+}
+
+.bg-acquamarine {
+  background-color: white;
+}
+
+.read-more-card {
+  background-color: rgb(41, 40, 40);
+  color: #ffffff;
+
+  border-radius: 3px;
+}
+
+@media screen and (max-width: 768px) {
+  .img-card-container {
+    /* border: 1px solid black;
+    border-block-end: none;
+    height: 30vh; */
+  }
+  .text-card-border {
+    /* border: 1px solid black;
+    border-block-start: none; */
+  }
 }
