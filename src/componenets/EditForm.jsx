@@ -210,7 +210,6 @@ function EditForm() {
         url={`/posts/${id}`}
         method="PUT"
       />
-      ;
     </>
   );
 }
